@@ -1,8 +1,11 @@
 import express from "express";
-import { signIn } from "../Contoller/controller";
+import { signUp, signIn } from "../Contoller/controller";
+import { validate } from "../Middleware/validate";
+import { signinSchema } from "../Schema/Schema";
 
 const authRouter = express.Router();
 
-authRouter.post("/signin", signIn);
+authRouter.post("/signup", validate(signinSchema), signUp);
+authRouter.post("/signin", validate(signinSchema), signIn);
 
 export default authRouter;

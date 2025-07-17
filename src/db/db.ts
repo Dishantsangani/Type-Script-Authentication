@@ -18,9 +18,9 @@ const pool = new Pool({
 (async () => {
   try {
     await pool.connect();
-    console.log("✅ Database Connected");
+    console.log("Database Connected");
   } catch (err) {
-    console.error("❌ Database Not Connected:", (err as Error).message);
+    console.error("Database Not Connected:", (err as Error).message);
   }
 })();
 

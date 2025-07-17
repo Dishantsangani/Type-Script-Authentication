@@ -1,6 +1,5 @@
-// src/errors/EmailAlreadyExistsError.ts
 export class EmailAlreadyExistsError extends Error {
-  constructor(message = "Email already in use") {
+  constructor(message = "Email already in Exist") {
     super(message);
     this.name = "Email Already Exists Error";
   }

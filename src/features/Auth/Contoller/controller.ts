@@ -1,34 +1,24 @@
 import { Request, Response } from "express";
-import { z } from "zod";
-import { signinSchema } from "../Schema/Schema";
-import { findUserByEmail, userHashPassword } from "../Services/services";
-import { EmailAlreadyExistsError } from "../utils/validerr";
+import { generateToken, registerUser } from "../Services/services";
+import { handleError } from "../utils/handleError";
 
-async function signIn(req: Request, res: Response): Promise<Response> {
+async function signUp(req: Request, res: Response): Promise<Response> {
+  const { email, password } = req.body;
   try {
-    const { email, password } = signinSchema.parse(req.body);
-
-    await findUserByEmail(email);
-
-    await userHashPassword(password, email);
-
-    return res.status(201).json({
-      message: "User Created successfully",
-    });
+    const user = await registerUser({ email, password });
+    generateToken(res, { id: user.id, email: user.email });
+    return res.status(201).json({ message: "create a new user" });
   } catch (err) {
-    if (err instanceof EmailAlreadyExistsError) {
-      return res.status(409).json({ message: err.message });
-    }
-    if (err instanceof z.ZodError) {
-      return res.status(400).json({
-        message: "Invalid input",
-      });
-    }
-    console.error("Signin error:", (err as Error).message);
-    return res.status(500).json({ message: "Internal server error" });
+    return handleError(res, err);
   }
 }
 
-async function signUp(req: Request, res: Response) {}
+async function signIn(req: Request, res: Response) {
+  const { email, password } = req.body;
+  try {
+  } catch (err) {
+    return handleError(res, err);
+  }
+}
 
-export { signIn, signUp };
+export { signUp, signIn };
